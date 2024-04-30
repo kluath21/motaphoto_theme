@@ -1,4 +1,4 @@
-<?php include 'template/modal-contact.php'; ?>
+
 </body>
 <footer id="site-footer" class="site-footer">
     <nav id="footer-navigation" class="footer-navigation">
@@ -9,6 +9,7 @@
         ));
         ?>
     </nav>
+    <?php get_template_part( 'template/modal-contact' ); ?>
 </footer>
-
+<?php wp_footer(); ?>
 </html>

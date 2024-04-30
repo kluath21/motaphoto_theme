@@ -18,7 +18,7 @@ body {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    top: 0px;
+    top: 30px;
     height: 80px;
     max-width: 1440px;
     background-color: #FFFFFF;
@@ -44,8 +44,8 @@ body {
     display: inline-block;
     width: 80px;
     height: 24px;
+    cursor: pointer;
 }
-
 
 .main-navigation a:hover {
     color: darkslateblue;
@@ -56,24 +56,44 @@ body {
     width: auto; 
     left: 146px;
 }
+input[type="submit" i] {
+  appearance: auto;
+  user-select: none;
+  text-align: center;
+  cursor: default;
+  box-sizing: border-box;
+  background-color: buttonface;
+  color: buttontext;
+  white-space: pre;
+  padding-block: 6px;
+  padding-inline: 100px;
+  
+}
+#wpcf7-form-control #wpcf7-textarea {
+  width: 263px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid #B8BBC2;
+
+}
 
 /* style du footer */
 .site-footer {
     max-width: 1440px;
     background-color: #FFFFFF;
     border-top: 1px solid #000000;
-    margin-top: 5%;
+    /* margin-top: 66%; */
     box-shadow: 0px 4px 14px 10px rgba(0, 0, 0, 0.031372549);
 
   }
 
 .site-footer .footer-navigation {
-        list-style-type: none;
-        display: flex;
-        gap: 45px;
-        height: inherit;
-        align-items: center;
-        justify-content: center;
+  list-style-type: none;
+  display: flex;
+  gap: 45px;
+  height: inherit;
+  align-items: center;
+  justify-content: center;
 }
 
 .site-footer .footer-navigation ul {
@@ -97,12 +117,290 @@ body {
     text-decoration: underline;
 }
 
-/* style modal */
-.hidden {
+.overlay {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    transition: opacity 500ms;
+    visibility: hidden;
+    z-index: 50;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+.open {
+    opacity: 1;
+    visibility: visible;
+    animation: fade-in-move-down 2s 300ms both;
+  }
+  
+  .popup {
+    margin: 70px;
+    padding: 20px;
+    background: #ffffff;
+    border: 5px solid #000000;
+    border-radius: 5px;
+    transition: all 2s ease-in-out;
+    position: absolute;
+    max-width: 597px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    overflow: hidden;
+    max-height: 769px;
+    min-height: 583px;
+  }
+  
+  .popup__header {
+    width: 168%;
+    height: auto;
+  }
+  /* Animations ouverture et fermeture */
+.animate-zoom-in {
+    animation: animatezoomin 0.6s;
+  }
+  
+  @keyframes animatezoomin {
+    from {
+      transform: scale(0);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+  .animate-zoom-out {
+    animation: animatezoomout 0.6s;
+  }
+  
+  @keyframes animatezoomout {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(0);
+    }
+  }
+/* Formulaire */
+#wpcf7-f58-o1 .wpcf7-form {
+  width: 263px;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
+#wpcf7-f58-o1 .wpcf7-form .wpcf7-text {
+    width: 263px;
+    height: 34px;
+    border-radius: 8px;
+    border: 1px solid #B8BBC2;
+  }
+  #wwpcf7-f58-o1 .wpcf7-form .wpcf7-textarea {
+    width: 263px;
+    height: 210px;
+    border-radius: 8px;
+    border: 1px solid #B8BBC2;
+  }
+  #wpcf7-f58-o1 .wpcf7-form .wpcf7-submit:hover {
+    background-color: #000000;
+    color: #FFFFFF;
+    box-shadow: 0px 2px 1px 0px rgba(0, 0, 0, 0.0196078431);
+    font-weight: 700;
+  }
+   /* hero section*/
+   .hero-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .hero-header .hero-header__img {
+    -o-object-fit: cover;
+       object-fit: cover;
+    max-height: 962px;
+    width: 100%;
+    margin-top: 80px;
+  }
+  .hero-header .hero-header__title {
+    position: absolute;
+    max-width: 100%;
+    padding: 5%;
+  }
+  /* section filter */
+  .filter-section {
+    display: flex;
+    align-items: center;
+    margin-top: 80px;
+    margin-bottom: 25px;
+    margin-left: 144px;
+    gap: 36px;
+  }
+  .filter-section .date-filter-section {
+    margin-left: 298px;
+  }
+  .filter-section .filter-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+  .filter-section .filter-container .filter-label {
     display: none;
-}
-
-#contact-modal.active {
+  }
+  .filter-section .filter-container .custom-dropdown {
+    position: relative;
+  }
+  .filter-section .filter-container .custom-dropdown .dropdown-toggle {
+    width: 260px;
+    height: 42px;
+    border-radius: 8px;
+    border: 1.3px solid var(--Blues-Gray2, #B8BBC2);
+    background: var(--White, #FFF);
+    display: flex;
+    padding: 11px 18px;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+    cursor: pointer;
+    color: var(--Black, #313144);
+    font-family: Poppins;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 18px;
+    letter-spacing: 0.36px;
+  }
+  .filter-section .filter-container .custom-dropdown .dropdown-toggle i {
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .filter-section .filter-container .custom-dropdown .dropdown-list {
+    color: var(--Black, #313144);
+    font-family: Poppins;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 18px;
+    letter-spacing: 0.36px;
+    position: absolute;
+    z-index: 1;
+    display: none;
+    list-style-type: none;
+    border-radius: 0px 0px 8px 8px;
+    background: var(--White, #FFF);
+    width: 260px;
+    height: 218px;
+    padding-left: 0px;
+  }
+  .filter-section .filter-container .custom-dropdown .dropdown-list.show {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .filter-section .filter-container .custom-dropdown .dropdown-list.show li {
+    padding-top: 11px;
+    padding-bottom: 11px;
+    padding-left: 24px;
+  }
+  .filter-section .filter-container .custom-dropdown .dropdown-list.show li:hover {
+    background-color: #FFD6D6;
+  }
+  .filter-section .filter-container .custom-dropdown .dropdown-list.show li:active {
+    background-color: #FE5858;
+  }
+  .filter-section .filter-container .custom-dropdown .dropdown-list.show li.selected {
+    background-color: #E00000;
+  }
+  .photo-list-section {
+    padding: 40px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .photo-list-section .photo-list-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    justify-content: center;
+  }
+  .photo-list-section .photo-list-container .photo-item {
+    margin-bottom: 20px;
+    width: 564px;
+    height: 495px;
+    position: relative;
+    overflow: hidden;
+  }
+  .photo-list-section .photo-list-container .photo-item .photo-image {
+    width: 100%;
+    height: 100%;
+    -o-object-fit: cover;
+       object-fit: cover;
     display: block;
-}
-
+  }
+  .photo-list-section .photo-list-container .photo-item:hover .icon-container {
+    display: flex;
+    gap: 0px;
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+  .photo-list-section .icon-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+  }
+  .photo-list-section .photo-info-icon {
+    font-size: 24px;
+    color: #fff;
+    cursor: pointer;
+    margin: auto;
+  }
+  .photo-list-section .fullscreen-icon {
+    font-size: 24px;
+    color: #fff;
+    cursor: pointer;
+  }
+  .photo-list-section .photo-reference,
+  .photo-list-section .photo-category {
+    position: absolute;
+    bottom: 10px;
+    color: #FFF;
+    font-family: Poppins;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    text-transform: uppercase;
+  }
+  .photo-list-section .photo-reference {
+    left: 10px;
+  }
+  .photo-list-section .photo-category {
+    right: 10px;
+  }
+  .photo-list-section .load-more-container {
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
+  }
+  .photo-list-section .load-more-container button {
+    width: 272px;
+    height: 50px;
+    background-color: #D8D8D8;
+    color: #000;
+    border-radius: 2px;
+    border: none;
+    box-shadow: 0px 2px 1px 0px rgba(0, 0, 0, 0.02);
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 400;
+    font-family: "Space Mono";
+  }
+  .photo-list-section .load-more-container button:hover {
+    color: white;
+    background: #000;
+    box-shadow: 0px 2px 1px 0px rgba(0, 0, 0, 0.02);
+  }

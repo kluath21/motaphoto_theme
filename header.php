@@ -10,7 +10,10 @@
     <?php wp_head(); ?>
 </head>
 
-<body>
+<body <?php body_class(); ?>>
+    
+<?php wp_body_open(); ?>
+	<header>
     <header id="masthead" class="site-header">
         <div class="site-branding">
             <a href="<?php echo esc_url(home_url('/')); ?>" rel="home">
