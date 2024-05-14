@@ -3,7 +3,7 @@
     font-family: 'Space Mono';
     font-weight: 700;
     font-style: italic;
-    src: url('../fonts/Space_Mono/SpaceMono-BoldItalic.ttf') format('truetype');
+    src: url('/assets/fonts/SpaceMono/SpaceMono-BoldItalic.ttf') format('truetype');
 }
 
 /* Space Mono Italic 400*/
@@ -11,7 +11,7 @@
     font-family: 'Space Mono';
     font-weight: 400;
     font-style: italic;
-    src: url('../fonts/Space_Mono/SpaceMono-Italic.ttf') format('truetype');
+    src: url('/assets/fonts/SpaceMono/SpaceMono-Italic.ttf') format('truetype');
 }
 
 /* Space Mono Normal 400*/
@@ -19,7 +19,7 @@
     font-family: 'Space Mono';
     font-weight: 400;
     font-style: normal;
-    src: url('../fonts/Space_Mono/SpaceMono-Regular.ttf') format('truetype');
+    src: url('wp-content/themes/motaphoto_theme/assets/fonts/SpaceMono/SpaceMono-Regular.ttf') format('truetype');
 }
 
 /* Poppins Normal 300*/
@@ -27,5 +27,5 @@
     font-family: 'Poppins';
     font-weight: 300;
     font-style: normal;
-    src: url('../fonts/Poppins/Poppins-Light.ttf') format('truetype');
+    src: url('/assets/fonts/Poppins/Poppins-Light.ttf') format('truetype');
 }
