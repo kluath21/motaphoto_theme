@@ -1,9 +1,10 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     const contactButtons = document.querySelectorAll('.open-contact-modal');
-    const overlay = document.querySelector('.overlay');
-    const popup = document.querySelector('.popup');
+    const overlay = document.getElementById('contact-popup');
+    const popup = overlay.querySelector('.popup');
     const closeButtons = document.querySelectorAll('.close-modal');
+    const refPhotoField = document.getElementById('ref-photo-field');
 
     const toggleModal = () => {
         const isOpen = overlay.classList.contains('open');
@@ -21,10 +22,21 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    contactButtons.forEach(button => button.addEventListener('click', toggleModal));
+    contactButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Récupérer la référence de la photo à partir de l'attribut data-reference
+            const reference = this.getAttribute('data-reference');
+            // Pré-remplir le champ "REF. PHOTO" dans le formulaire de contact
+            if (refPhotoField) {
+                refPhotoField.value = reference;
+            }
+            toggleModal();
+        });
+    });
+
     closeButtons.forEach(button => button.addEventListener('click', toggleModal));
 
-    // Ajouter l'écouteur d'événements uniquement si la modal est ouverte
+    // Ajouter l'écouteur d'événements pour fermer la modal lorsqu'on clique en dehors de celle-ci
     overlay.addEventListener('click', (event) => {
         if (event.target === overlay) {
             toggleModal();
@@ -39,10 +51,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-
-
-
-// code pour la section filter
 document.addEventListener('DOMContentLoaded', function initialize() {
     // Déclaration des constantes et variables
     const categoryDropdown = document.getElementById('category-dropdown');
@@ -54,6 +62,7 @@ document.addEventListener('DOMContentLoaded', function initialize() {
     let selectedDate = '';
     let page = 2;
     let maxphotos = 0;
+
     // Fonction de changement de filtre
     function handleFilterChange(selectedValue, dropdownType) {
         switch (dropdownType) {
@@ -90,12 +99,11 @@ document.addEventListener('DOMContentLoaded', function initialize() {
 
     // Fonction de gestion du succès du chargement des photos
     function handleFilterSuccess(response) {
-        // console.log(response);
         if (response.success && response.data) {
             const newHtml = response.data;
             const photoListContainer = document.querySelector('.photo-list-section .photo-list-container');
             photoListContainer.innerHTML = newHtml.trim() !== '' ? newHtml : console.error('La réponse Ajax a renvoyé un contenu vide.');
-            addHoverEffectToPhotos();
+            attachLightboxEvents(); // Réattache les événements lightbox après le chargement
         } else {
             handleFilterError(response.data);
         }
@@ -133,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function initialize() {
             const photoListContainer = document.querySelector('.photo-list-section .photo-list-container');
             photoListContainer.innerHTML += newHtml.trim() !== '' ? newHtml : console.error('La réponse Ajax a renvoyé un contenu vide.');
             page++;
-            addHoverEffectToPhotos();
+            attachLightboxEvents(); // Réattache les événements lightbox après le chargement
         } else {
             handleLoadMoreError(response.data);
         }
@@ -163,20 +171,20 @@ document.addEventListener('DOMContentLoaded', function initialize() {
         });
     }
 
-    // Fonction pour créer les listes déroulantes personnalisés
-    function createCustomDropdown(dropdownElement, dropdownType) { // dropdownType est une chaîne de caractères pour identifier le type de dropdown
-        const dropdownToggle = dropdownElement.querySelector('.dropdown-toggle'); // Récupère le bouton de bascule
-        const dropdownList = dropdownElement.querySelector('.dropdown-list'); // Récupère la liste déroulante
+    // Fonction pour créer les listes déroulantes personnalisées
+    function createCustomDropdown(dropdownElement, dropdownType) {
+        const dropdownToggle = dropdownElement.querySelector('.dropdown-toggle');
+        const dropdownList = dropdownElement.querySelector('.dropdown-list');
 
-        dropdownToggle.addEventListener('click', function() { // Ajoute un écouteur d'événement pour le clic sur le bouton de bascule
-            dropdownList.classList.toggle('show'); // Bascule la classe "show" pour afficher ou masquer la liste déroulante
+        dropdownToggle.addEventListener('click', function() {
+            dropdownList.classList.toggle('show');
         });
 
-        handleDropdownItemStates(dropdownList, dropdownType); // Appelle la fonction pour gérer les états des éléments de la liste déroulante
+        handleDropdownItemStates(dropdownList, dropdownType);
 
-        document.addEventListener('click', function(e) { // Ajoute un écouteur d'événement pour fermer la liste déroulante lors du clic en dehors de celle-ci
-            if (!dropdownElement.contains(e.target)) { // Vérifie si l'élément cliqué est en dehors de la liste déroulante
-                dropdownList.classList.remove('show'); // Masque la liste déroulante
+        document.addEventListener('click', function(e) {
+            if (!dropdownElement.contains(e.target)) {
+                dropdownList.classList.remove('show');
             }
         });
     }
@@ -194,35 +202,81 @@ document.addEventListener('DOMContentLoaded', function initialize() {
         });
     }
 
+    // Fonction pour attacher les événements de la lightbox aux éléments fullscreen-icon
+    function attachLightboxEvents() {
+        const photoTrigger = document.querySelectorAll('.fullscreen-icon');
+        const lightboxOverlay = document.getElementById('lightbox-overlay');
+        const lightboxImage = document.getElementById('lightbox-image');
+        const lightboxRef = document.getElementById('lightbox-reference');
+        const lightboxCategorie = document.getElementById('lightbox-category');
+        const lightboxPrev = document.getElementById('lightbox-prev');
+        const lightboxNext = document.getElementById('lightbox-next');
+        const lightboxCloseButton = document.getElementById('lightbox-close');
+        let currentPhotoIndex = 0;
+        let photoItems = document.querySelectorAll('.photo-item'); // Déclarer photoItems ici
+
+        if (!photoTrigger.length || !lightboxPrev || !lightboxNext || !lightboxCloseButton || !lightboxOverlay) {
+            console.error('One or more necessary elements are missing.');
+            return;
+        }
+
+        lightboxCloseButton.addEventListener('click', () => {
+            lightboxOverlay.style.display = 'none';
+        });
+
+        photoTrigger.forEach((photoItem, index) => {
+            photoItem.addEventListener('click', (event) => {
+                event.preventDefault(); // Empêche la redirection
+                openLightbox(index);
+            });
+        });
+
+        lightboxPrev.addEventListener('click', showPrevPhoto);
+        lightboxNext.addEventListener('click', showNextPhoto);
+
+        document.addEventListener('keyup', function(event) {
+            if (event.key === "Escape") {
+                lightboxOverlay.style.display = 'none';
+            }
+        });
+
+        function openLightbox(index) {
+            const img = photoItems[index].querySelector('img');
+            lightboxImage.src = img.src;
+            lightboxRef.textContent = photoItems[index].querySelector('.photo-reference').textContent;
+            lightboxCategorie.textContent = photoItems[index].querySelector('.photo-category').textContent;
+            lightboxOverlay.style.display = 'block';
+            currentPhotoIndex = index;
+        }
+
+        function showPrevPhoto() {
+            if (currentPhotoIndex > 0) {
+                openLightbox(--currentPhotoIndex);
+            }
+        }
+
+        function showNextPhoto() {
+            if (currentPhotoIndex < photoItems.length - 1) {
+                openLightbox(++currentPhotoIndex);
+            }
+        }
+    }
+
     // Ajouter les écouteurs d'événements de survol aux photos initiales
     addHoverEffectToPhotos();
 
     // Créer les dropdowns personnalisés
-    createCustomDropdown(categoryDropdown, 'category');
-    createCustomDropdown(formatDropdown, 'format');
-    createCustomDropdown(dateDropdown, 'date');
+    if (categoryDropdown) createCustomDropdown(categoryDropdown, 'category');
+    if (formatDropdown) createCustomDropdown(formatDropdown, 'format');
+    if (dateDropdown) createCustomDropdown(dateDropdown, 'date');
 
     // Ajouter un écouteur d'événement pour le bouton "Charger plus"
-    loadMoreButton.addEventListener('click', handleLoadPhotos);
+    if (loadMoreButton) loadMoreButton.addEventListener('click', handleLoadPhotos);
+
+    // Attacher les événements de la lightbox initialement
+    attachLightboxEvents();
 });
 
-// jQuery(document).ready(function($) {
-//     $('#date-dropdown .dropdown-list li').on('click', function() {
-//         var selectedValue = $(this).data('value'); // Récupère la valeur sélectionnée
-
-//         $.ajax_motaphoto({
-//             url: ajax_url, // Assurez-vous que ajaxurl est défini correctement
-//             type: 'POST',
-//             data: {
-//                 action: 'load_photos_by_date', // action hook pour le backend
-//                 date_filter: selectedValue // la valeur de filtrage sélectionnée
-//             },
-//             success: function(response) {
-//                 $('#some-container').html(response); // Mettez à jour le contenu avec la réponse
-//             }
-//         });
-//     });
-// });
 
 
 // code pour la section single-photo
@@ -270,17 +324,57 @@ if (nextArrow) {
         }
     });
 }
-
-// Menu burger
+// code pour le menu mobile
 document.addEventListener('DOMContentLoaded', function() {
     const menuToggle = document.querySelector('.menu-toggle');
-    const siteNavigation = document.getElementById('site-navigation');
+    const menuClose = document.querySelector('.menu-close');
+    const primaryMenu = document.getElementById('primary-menu');
+
+    function toggleMenu(expanded) {
+        menuToggle.setAttribute('aria-expanded', expanded);
+        menuClose.setAttribute('aria-expanded', expanded);
+        primaryMenu.classList.toggle('show', expanded);
+        menuClose.style.display = expanded ? 'block' : 'none';
+        menuToggle.style.display = expanded ? 'none' : 'block';
+    }
 
     if (menuToggle) {
         menuToggle.addEventListener('click', function() {
             const expanded = this.getAttribute('aria-expanded') === 'true' || false;
-            this.setAttribute('aria-expanded', !expanded);
-            siteNavigation.style.display = expanded ? 'none' : 'block';
+            toggleMenu(!expanded);
         });
     }
+
+    if (menuClose) {
+        menuClose.addEventListener('click', function() {
+            const expanded = this.getAttribute('aria-expanded') === 'true' || false;
+            toggleMenu(!expanded);
+        });
+    }
+
+    window.addEventListener('resize', function() {
+        if (window.innerWidth >= 768) { // Breakpoint pour passer en version desktop
+            menuClose.style.display = 'none';
+            menuToggle.style.display = 'none';
+            primaryMenu.classList.remove('show');
+        } else {
+            menuToggle.style.display = 'block';
+            menuClose.style.display = 'none';
+            primaryMenu.classList.remove('show');
+        }
+    });
+
+    // Vérifiez la taille de la fenêtre au chargement de la page
+    if (window.innerWidth >= 768) {
+        menuToggle.style.display = 'none';
+        menuClose.style.display = 'none';
+        primaryMenu.classList.remove('show');
+    } else {
+        menuToggle.style.display = 'block';
+        menuClose.style.display = 'none';
+        primaryMenu.classList.remove('show');
+    }
 });
+
+
+

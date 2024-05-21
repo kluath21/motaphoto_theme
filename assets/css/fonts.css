@@ -1,31 +1,27 @@
-/* Space Mono Bold Italic*/
-@font-face {
-    font-family: 'Space Mono';
-    font-weight: 700;
-    font-style: italic;
-    src: url('/assets/fonts/SpaceMono/SpaceMono-BoldItalic.ttf') format('truetype');
-}
-
-/* Space Mono Italic 400*/
-@font-face {
-    font-family: 'Space Mono';
-    font-weight: 400;
-    font-style: italic;
-    src: url('/assets/fonts/SpaceMono/SpaceMono-Italic.ttf') format('truetype');
-}
-
-/* Space Mono Normal 400*/
-@font-face {
-    font-family: 'Space Mono';
-    font-weight: 400;
-    font-style: normal;
-    src: url('wp-content/themes/motaphoto_theme/assets/fonts/SpaceMono/SpaceMono-Regular.ttf') format('truetype');
-}
-
-/* Poppins Normal 300*/
 @font-face {
     font-family: 'Poppins';
     font-weight: 300;
     font-style: normal;
-    src: url('/assets/fonts/Poppins/Poppins-Light.ttf') format('truetype');
+    src: url('./fonts/Poppins/Poppins-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Space Mono';
+    font-weight: 700;
+    font-style: italic;
+    src: url('./fonts/SpaceMono/SpaceMono-BoldItalic.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Space Mono';
+    font-weight: 400;
+    font-style: italic;
+    src: url('./fonts/SpaceMono/SpaceMono-Italic.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Space Mono';
+    font-weight: 400;
+    font-style: normal;
+    src: url('./fonts/SpaceMono/SpaceMono-Normal.ttf') format('truetype');
 }

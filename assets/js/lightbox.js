@@ -1,7 +1,7 @@
 // ce script permet d'afficher une image en grand format lorsqu'on clique dessus
 (function() {
     document.addEventListener('DOMContentLoaded', function() {
-        const photoItems = document.querySelectorAll('.photo-item');
+        const photoTrigger = document.querySelectorAll('.fullscreen-icon');
         const lightboxPrev = document.getElementById('lightbox-prev');
         const lightboxNext = document.getElementById('lightbox-next');
         const lightboxCloseButton = document.getElementById('lightbox-close');
@@ -9,7 +9,7 @@
 
         let currentPhotoIndex = 0;
 // on vérifie si les éléments nécessaires sont bien présents dans le DOM
-        if (!photoItems.length || !lightboxPrev || !lightboxNext || !lightboxCloseButton || !lightboxOverlay) {
+        if (!photoTrigger.length || !lightboxPrev || !lightboxNext || !lightboxCloseButton || !lightboxOverlay) {
             console.error('One or more necessary elements are missing.');
             return;
         }
@@ -18,7 +18,7 @@
             lightboxOverlay.style.display = 'none';
         });
 
-        photoItems.forEach((photoItem, index) => {
+        photoTrigger.forEach((photoItem, index) => {
             photoItem.addEventListener('click', () => {
                 openLightbox(index);
             });
@@ -34,6 +34,8 @@
         });
 // on crée une fonction pour ouvrir la lightbox
         function openLightbox(index) { // on récupère l'index de l'image cliquée
+            const photoItems = document.querySelectorAll('.photo-item');
+
             const img = photoItems[index].querySelector('img'); // on récupère l'élément img de l'image cliquée
             const lightboxImage = document.getElementById('lightbox-image'); // on récupère l'élément img de la lightbox
             const lightboxRef = document.getElementById('lightbox-reference'); // on récupère l'élément reference de la lightbox
@@ -58,7 +60,7 @@
         }
 
         function showNextPhoto() { // on crée une fonction pour afficher l'image suivante
-            if (currentPhotoIndex < photoItems.length - 1) {
+            if (currentPhotoIndex < photoTrigger.length - 1) {
                 openLightbox(++currentPhotoIndex);
             }
         }

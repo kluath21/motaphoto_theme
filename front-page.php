@@ -128,7 +128,6 @@ $unique_years = get_unique_years();
             <div class="photo-list-container">
                 <?php while ($query->have_posts()) : $query->the_post(); ?>
                     <div class="post__image photo-item">
-                        <a href="<?php echo esc_url(get_permalink()); ?>">
                             <?php
                             // prend l'ID de l'image
                             $image_id = get_post_meta(get_the_ID(), 'image', true);
@@ -148,7 +147,6 @@ $unique_years = get_unique_years();
                                 echo '<p>No image available.</p>';
                             }
                             ?>
-                        </a>
                         <span class="icon-container">
                             <span class="photo-reference">
                                 <?php

@@ -11,7 +11,7 @@ function motaphoto_enqueue_assets() {
     wp_enqueue_style('motaphoto_style', get_template_directory_uri() . '/style.css');
 
     // Optionally, enqueue additional font styles if needed
-    // wp_enqueue_style('motaphoto_fonts', get_template_directory_uri() . '/assets/css/fonts.css', [], '1.0.0');
+    wp_enqueue_style('motaphoto_fonts', get_template_directory_uri() . '/assets/css/fonts.css', [], '1.0.0');
 
     // Enqueue custom scripts
     wp_enqueue_script('motaphoto_script', get_template_directory_uri() . '/script.js', ['jquery'], '1.0.0', true);
