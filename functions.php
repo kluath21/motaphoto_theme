@@ -9,6 +9,7 @@ add_action('wp_enqueue_scripts', 'theme_add_jquery');
 function motaphoto_enqueue_assets() {
     // Enqueue custom styles
     wp_enqueue_style('motaphoto_style', get_template_directory_uri() . '/style.css');
+    wp_enqueue_style('motaphoto_style', get_template_directory_uri() . '/assets/sass/custom.css');
 
     // Optionally, enqueue additional font styles if needed
     wp_enqueue_style('motaphoto_fonts', get_template_directory_uri() . '/assets/css/fonts.css', [], '1.0.0');
