@@ -997,7 +997,7 @@ button.open-contact-modal.clicked {
     background-color: #FFFFFF;
     position: absolute;
     top: 45%;
-    left: -1px;
+    left: -2px;
     width: 100%;
     box-shadow: 0px 4px 14px 10px rgba(0, 0, 0, 0.031372549);
     z-index: 2;
@@ -1006,7 +1006,7 @@ button.open-contact-modal.clicked {
 
   #primary-menu.show {
     display: flex;
-    width: 376px;
+    width: 379px;
     height: 834px;
     background-color: red;
     font-size: 44px;
@@ -1072,7 +1072,7 @@ button.open-contact-modal.clicked {
     overflow: hidden;
     width: 286px;
     height: 583px;
-    left: 58px;
+    /* left: 58px; */
     top: 120px;
   }
 

@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
-
+/* le code ci-dessous permet de filtrer les photos en fonction de la catégorie, du format et de la date */
 document.addEventListener('DOMContentLoaded', function initialize() {
     // Déclaration des constantes et variables
     const categoryDropdown = document.getElementById('category-dropdown');
@@ -88,6 +88,9 @@ document.addEventListener('DOMContentLoaded', function initialize() {
         formData.append('category', selectedCategory);
         formData.append('format', selectedFormat);
         formData.append('date', selectedDate);
+        // ajout de nonce
+        formData.append('nonce', ajax_motaphoto.ajax_nonce);
+        // console.log(ajax_motaphoto.ajax_nonce);
         fetch(ajax_motaphoto.ajax_url, {
             method: 'POST',           
             body: formData,
@@ -124,6 +127,8 @@ document.addEventListener('DOMContentLoaded', function initialize() {
         formData.append('date', selectedDate);
         formData.append('page', page);
         formData.append('offset', maxphotos);
+        // ajout de nonce
+        formData.append('nonce',ajax_motaphoto.ajax_nonce);
         
         fetch(ajax_motaphoto.ajax_url, {
             method: 'POST',           

@@ -89,7 +89,7 @@ function get_unique_years() {
     return $years;
 }
 
-// Utilisation de cette fonction pour afficher les dates dans le dropdown
+// Utilisation de cette fonction pour afficher les dates du plus récent au plus ancien
 $unique_years = get_unique_years();
 ?>
 <!-- Trie par date -->
@@ -101,6 +101,7 @@ $unique_years = get_unique_years();
             <li data-value="" data-label="Tous">Tous</li>
             <li data-value="recent" data-label="Plus récentes">Plus récentes</li>
             <li data-value="old" data-label="Plus anciennes">Plus anciennes</li>
+            <!-- Boucle pour afficher les années -->
             <?php foreach ($unique_years as $year) : ?>
                 <li data-value="<?= esc_attr($year); ?>" data-label="Année <?= esc_html($year); ?>">
                     Année <?= esc_html($year); ?>

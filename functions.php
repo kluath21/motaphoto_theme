@@ -22,7 +22,11 @@ function motaphoto_enqueue_assets() {
     // Localisation des données de la lightbox
 
     // Localize script to pass necessary data to the frontend
-    wp_localize_script('motaphoto_script', 'ajax_motaphoto', ['ajax_url' => admin_url('admin-ajax.php')]);
+    // wp_localize_script('motaphoto_script', 'ajax_motaphoto', ['ajax_url' => admin_url('admin-ajax.php')]);
+    wp_localize_script( 'motaphoto_script', 'ajax_motaphoto', array(
+        'ajax_url' => admin_url( 'admin-ajax.php' ),
+        'ajax_nonce' => wp_create_nonce( 'ajax-nonce' )
+    ) );
 }
 add_action('wp_enqueue_scripts', 'motaphoto_enqueue_assets');
 
@@ -50,33 +54,6 @@ function motaphoto_register_menus() {
     ));
 }
 add_action('after_setup_theme', 'motaphoto_register_menus');
-
-// add_action( 'wp', 'var_dump_current_post_taxonomies_and_meta' );
-
-// function var_dump_current_post_taxonomies_and_meta() {
-//     global $post;
-//     if (is_single() || is_page()) {
-//         var_dump($post);
-        
-//         // Obtenez les métadonnées du post
-//         $post_meta = get_post_meta($post->ID);
-//         var_dump($post_meta);
-        
-//         // Obtenez les termes pour chaque taxonomie associée au post
-//         $taxonomies = get_post_taxonomies($post->ID);
-//         $taxonomy_terms = array();
-//         foreach ($taxonomies as $taxonomy) {
-//             $terms = get_the_terms($post->ID, $taxonomy);
-//             if ($terms) {
-//                 $taxonomy_terms[$taxonomy] = $terms;
-//             }
-//         }
-        
-//         // Affichez les termes de la taxonomie
-//         var_dump($taxonomy_terms);
-//     }
-// }
-
 
 // chargement des photos
 function load_photos($args) {
@@ -118,7 +95,7 @@ function load_photos($args) {
         $query_args['tax_query'] = $tax_query;
     }
 
-    // Sort order
+    // Trie les photos par date
     if ($args['date'] === 'old') {
         $query_args['orderby'] = 'date';
         $query_args['order'] = 'ASC';
@@ -130,11 +107,11 @@ function load_photos($args) {
     $query = new WP_Query($query_args);
 
     $html = '';
-
+// Boucle pour afficher les photos
     if ($query->have_posts()) {
         while ($query->have_posts()) {
             $query->the_post();
-
+// Récupère les données de la photo
             $reference = get_post_meta(get_the_ID(), 'Référence', true);
             $image_id = get_post_meta(get_the_ID(), 'image', true);
             if ($image_id) {
@@ -165,7 +142,12 @@ function load_photos($args) {
 
 // AJAX callback function
 function ajax_load_photos() {
-    // Get and parse AJAX parameters
+    //   // Vérifier le nonce
+    //   if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'ajax-nonce')) {
+    //     wp_send_json_error('Vous n’avez pas l’autorisation d’effectuer cette action.', 403);
+    //     return; // Arrêter l'exécution si le nonce n'est pas valide
+    // }
+    // Récupérer et analyser les paramètres AJAX
     $args = array(
         'paged' => isset($_POST['page']) ? intval($_POST['page']) : 1,
         'category' => isset($_POST['category']) ? sanitize_text_field($_POST['category']) : '',
@@ -177,6 +159,38 @@ function ajax_load_photos() {
 
     wp_send_json_success($html);
 }
+
+function load_photos_by_category_and_format() {
+    wp_send_json_success('Photos filtrées par catégorie et format.');
+}
+
+// Vérifie le nonce et appelle la fonction appropriée
+function verify_ajax_nonce() {
+    // Vérifier le nonce
+    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'ajax-nonce')) {
+        wp_send_json_error('Vous n’avez pas l’autorisation d’effectuer cette action.', 403);
+        return; // Arrête l'exécution si le nonce n'est pas valide
+    }
+
+    // Vérifier l'action et appelle la fonction appropriée
+    if (isset($_POST['action'])) {
+        switch ($_POST['action']) {
+            case 'load_photos_by_category_and_format':
+                load_photos_by_category_and_format();
+                break;
+            // Autres cas pour les autres actions
+            default:
+                wp_send_json_error('Action inconnue.', 400);
+        }
+    } else {
+        wp_send_json_error('Aucune action spécifiée.', 400);
+    }
+}
+
+add_action('wp_ajax_load_photos_by_category_and_format', 'verify_ajax_nonce');
+add_action('wp_ajax_nopriv_load_photos_by_category_and_format', 'verify_ajax_nonce');
+
+
 
 // Hook the AJAX function
 add_action('wp_ajax_load_photos_by_category_and_format', 'ajax_load_photos');
